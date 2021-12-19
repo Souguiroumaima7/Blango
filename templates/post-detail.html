@@ -1,4 +1,9 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>posts</title>
+    {% extends "base.html" %}
 {% block content %}
 <h2>{{post.title}} </h2>
   <div class = "row">
@@ -8,7 +13,13 @@
 </div>
 <div class = "row">
    <div class = "col">
-     {{post.content|safe}}   
+     {{post.content|safe}}
   </div>
 </div>
-       {% endblock %} 
+       {% endblock %}
+
+</head>
+<body>
+
+</body>
+</html>
