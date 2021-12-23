@@ -1,12 +1,6 @@
-from django.shortcuts import render
-
 # Create your views here.
-from django.template.defaulttags import comment
-from django.utils import timezone
-import blog.models
-from django.shortcuts import render , get_object_or_404
-from crispy_forms.layout import Submit
 from crispy_forms.helper import FormHelper
+from django.template.defaulttags import comment
 
 from Blog import forms
 
@@ -47,3 +41,36 @@ class commentForm(forms.ModelForm) :
         super(commentForm , self)._init_(*args , **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(submit('submit' , 'submit'))
+
+from django.views.decorators.cache import cache_page
+@cache_page(300)
+def index(request):
+    from django.http import HttpResponse
+    return HttpResponse(str(request.user).encode("ascii"))
+    posts = Post.objects.filter(published_at__lte=timezone.now())
+    logger.debug("Got %d posts", len(posts))
+    return render(request, "blog/index.html", {"posts": posts})
+from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
+import blog.models
+import logging
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
+
+logger = logging.getLogger(__name__)
+
+# Create your views here.
+@cache_page(300)
+@vary_on_cookie
+def index(request):
+    from django.http import HttpResponse
+    logger.debug("Index function is called!")
+    return HttpResponse(str(request.user).encode("ascii"))
+    posts = Post.objects.filter(published_at__lte=timezone.now())
+    logger.debug("Got %d posts", len(posts))
+    return render(request, "blog/index.html", {"posts": posts})
+
+def index(request):
+    posts = Post.objects.filter(published_at__lte=timezone.now())
+    logger.debug("Got %d posts", len(posts))
+    return render(request, "blog/index.html", {"posts": posts})
