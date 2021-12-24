@@ -15,16 +15,12 @@ Including another URLconf
 """
 import blog
 from django.contrib import admin
-from django.urls import path
+from django.urls import path , include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     ]
-import debug_toolbar
-from django.conf import settings
-from django.urls import path, include
-
-if settings.DEBUG:
-    urlpatterns += [
-        path("__debug__/", include(debug_toolbar.urls)),
-    ]
+import blango_auth.views
+path("accounts/", include("django.contrib.auth.urls")),
+path("accounts/profile/", blango_auth.views.profile,
+name="profile"),
