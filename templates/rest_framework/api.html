@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% extends "rest_framework/base.html" %}
+{% block style %}
+    {{ block.super }}
+    <style>
+        div .navbar {
+            border-top-color: #1E90FF;
+        }
+    </style>
+{% endblock %}
+
+</body>
+</html>
