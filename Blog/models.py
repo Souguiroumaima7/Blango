@@ -3,42 +3,62 @@ from django.conf import settings
 from django.db.models import TextField
 
 
-class Tag (models.Model):
+class Tag(models.Model) :
     value = models.TextField(max_length=100)
 
-    def __str__(self):
+    def __str__(self) :
         return self.value
 
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
-class Comment(models.Model):
- creator = models.ForeignKey(settings.AUTH_USER_MODEL,
- on_delete=models.CASCADE)
- content = models.TextField()
- content_type = models.ForeignKey(ContentType,
- on_delete=models.CASCADE)
- object_id = models.PositiveIntegerField()
- content_object = GenericForeignKey("content_type",
-"object_id")
+
+class Comment(models.Model) :
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL ,
+                                on_delete=models.CASCADE)
+    content = models.TextField()
+    content_type = models.ForeignKey(ContentType ,
+                                     on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type" ,
+                                       "object_id")
 
 
-
-class Post(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+class Post(models.Model) :
+    author = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-    published_at = models.DateTimeField(blank=True,null=True)
-    title =models.TextField(max_length=100)
+    published_at = models.DateTimeField(blank=True , null=True)
+    title = models.TextField(max_length=100)
     slug = models.SlugField()
     summary = models.TextField()
     content = models.TextField()
-    tags = models.ManyToManyField(Tag,related_name="posts")
+    tags = models.ManyToManyField(Tag , related_name="posts")
 
-    def __str__(self):
+    def __str__(self) :
         return self.title
 
-published_at = models.DateTimeField(blank=True, null=True, db_index=True)
+
+published_at = models.DateTimeField(blank=True , null=True , db_index=True)
 
 
+class AuthorProfile(models.Model) :
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL , on_delete=models.CASCADE , related_name="profile"
+    )
+    bio = models.TextField()
+
+    def __str__(self) :
+        return f"{self.__class__.__name__} object for {self.user}"
+
+
+from versatileimagefield.fields import VersatileImageField , PPOIField
+
+
+class Post(models.Model) :
+    # existing fields omitted
+    hero_image = VersatileImageField(
+        upload_to="hero_images" , ppoi_field="ppoi" , null=True , blank=True
+    )
+    ppoi = PPOIField(null=True , blank=True)
