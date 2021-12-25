@@ -96,3 +96,7 @@
         <a class="page-link" href="#">Next</a>
     </li>
 </ul>
+{% if post.hero_image %}
+    <img src="{{ post.hero_image.thumbnail100x100.url }}"/>
+{% endif %}
+</small>
