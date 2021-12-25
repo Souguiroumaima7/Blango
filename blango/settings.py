@@ -16,8 +16,7 @@ from configurations import Configuration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django.conf import settings
-
-
+from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,12 +40,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions" ,
     "django.contrib.messages" ,
     "django.contrib.staticfiles" ,
-     "blango_auth" ,
+    "blango_auth" ,
     "Blog" ,
     "crispy_forms" ,
     "crispy_bootstrap5" ,
-    "rest_framework",
-    "debug_toolbar",
+    "rest_framework" ,
+    "debug_toolbar" ,
     "swagger_ui"
 
 ]
@@ -59,7 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware' ,
     'django.contrib.messages.middleware.MessageMiddleware' ,
     'django.middleware.clickjacking.XFrameOptionsMiddleware' ,
-     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware" ,
 ]
 INTERNAL_IPS = ["192.168.11.179"]
 
@@ -93,6 +92,8 @@ DATABASES = {
         'NAME' : BASE_DIR / 'db.sqlite3' ,
     }
 }
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -134,34 +135,66 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-            "DEFAULT_THROTTLE_CLASSES": [
-            "blog.api.throttling.AnonSustainedThrottle",
-            "blog.api.throttling.AnonBurstThrottle",
-            "blog.api.throttling.UserSustainedThrottle",
-            "blog.api.throttling.UserBurstThrottle",
-        ],
-        "DEFAULT_THROTTLE_RATES": {
-            "anon_sustained": "500/day",
-            "anon_burst": "10/minute",
-            "user_sustained": "5000/day",
-            "user_burst": "100/minute",
-        },
+    "DEFAULT_THROTTLE_CLASSES" : [
+        "blog.api.throttling.AnonSustainedThrottle" ,
+        "blog.api.throttling.AnonBurstThrottle" ,
+        "blog.api.throttling.UserSustainedThrottle" ,
+        "blog.api.throttling.UserBurstThrottle" ,
+    ] ,
+    "DEFAULT_THROTTLE_RATES" : {
+        "anon_sustained" : "500/day" ,
+        "anon_burst" : "10/minute" ,
+        "user_sustained" : "5000/day" ,
+        "user_burst" : "100/minute" ,
+    } ,
 
+}
+REST_FRAMEWORK = {
+    # existing settings omitted
+    "DEFAULT_PAGINATION_CLASS" : "rest_framework.pagination.PageNumberPagination" ,
+    "PAGE_SIZE" : 100
+}
+REST_FRAMEWORK = {
+    # other settings omitted
+    "DEFAULT_FILTER_BACKENDS" : [
+        "django_filters.rest_framework.DjangoFilterBackend"
+    ] ,
+}
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES" : [
+        "rest_framework.authentication.BasicAuthentication" ,
+        "rest_framework.authentication.SessionAuthentication" ,
+        "rest_framework.authentication.TokenAuthentication" ,
+        "rest_framework_simplejwt.authentication.JWTAuthentication"
+    ] ,
+    # existing REST_FRAMEWORK settings omitted
 }
 
 SWAGGER_SETTINGS = {
-    "SECURITY_DEFINITIONS": {
-        "Token": {"type": "apiKey", "name": "Authorization", "in": "header"},
-        "Basic": {"type": "basic"},
+    "SECURITY_DEFINITIONS" : {
+        "Token" : {"type" : "apiKey" , "name" : "Authorization" , "in" : "header"} ,
+        "Basic" : {"type" : "basic"} ,
     }
 }
 AUTH_USER_MODEL = "blango_auth.User"
-class dev:
- EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
- ACCOUNT_ACTIVATION_DAYS = 7
+
+
+class dev :
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    ACCOUNT_ACTIVATION_DAYS = 7
+
+
 pass
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+
+
+class dev :
+    SIMPLE_JWT = {
+        "ACCESS_TOKEN_LIFETIME" : timedelta(days=1) ,
+        "REFRESH_TOKEN_LIFETIME" : timedelta(days=7) ,
+    }
+
