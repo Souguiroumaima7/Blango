@@ -1,6 +1,7 @@
 from django import forms
 
-from blog.models import comment
+import blog.models
+from django.template.defaulttags import comment
 
 
 class commentForm(forms.ModelForm):

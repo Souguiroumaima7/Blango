@@ -7,3 +7,4 @@ urlpatterns = [
     path("posts/<int:pk>/" , post_detail , name="api_post_detail") ,
 ]
 
+
