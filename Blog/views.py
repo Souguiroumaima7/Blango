@@ -82,3 +82,7 @@ def index(request) :
 
 
 posts = Post.objects.filter(published_at__lte=timezone.now()).select_related("author")
+
+
+def post_table (request):
+  return render(request,"blog/post-table.html")
