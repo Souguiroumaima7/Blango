@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>posts</title>
+    {% extends "base.html" %}
+{% block content %}
+<h2>{{post.title}} </h2>
+  <div class = "row">
+     <div class ="col" >
+       {% include "blog/post-byline.html" %}
+    </div>
+</div>
+<div class = "row">
+   <div class = "col">
+     {{post.content|safe}}
+  </div>
+</div>
+       {% endblock %}
+
+</head>
+<body>
+{% if post.author.profile %}
+    {% row %}
+        {% col %}
+            <h4>About the author</h4>
+            <p>{{ post.author.profile.bio }}</p>
+        {% endcol %}
+    {% endrow %}
+{% endif %}
+{% if post.hero_image %}
+    {% row %}
+        {% col %}
+            <img class="img-fluid" src="{{ post.hero_image.url }}">
+        {% endcol %}
+    {% endrow %}
+{% endif %}
+</body>
+</html>
